@@ -2,14 +2,6 @@
 
 import PackageDescription
 
-let rocketIfNeeded: [Package.Dependency]
-
-#if os(OSX) || os(Linux)
-rocketIfNeeded = []
-#else
-rocketIfNeeded = []
-#endif
-
 let package = Package(
     name: "Moya",
     platforms: [
@@ -61,20 +53,3 @@ let package = Package(
         )
     ]
 )
-
-#if canImport(PackageConfig)
-import PackageConfig
-
-let config = PackageConfiguration([
-    "rocket": [
-        "before": [
-            "scripts/update_changelog.sh",
-            "scripts/update_podspec.sh"
-        ],
-        "after": [
-            "rake create_release\\[\"$VERSION\"\\]",
-            "scripts/update_docs_website.sh"
-        ]
-    ]
-]).write()
-#endif
