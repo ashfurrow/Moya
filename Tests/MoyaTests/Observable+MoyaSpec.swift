@@ -576,7 +576,7 @@ final class ObservableMoyaSpec: QuickSpec {
                 }
                 let observable = Response(statusCode: 200, data: data).asObservable()
 
-                var receivedError: Error?
+                var receivedError: (any Error)?
                 _ = observable.map(Issue.self, using: decoder).subscribe { event in
                     switch event {
                     case .next:

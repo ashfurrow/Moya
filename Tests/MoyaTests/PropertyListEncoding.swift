@@ -42,7 +42,7 @@ internal struct PropertyListEncoding: ParameterEncoding {
     /// - throws: An `Error` if the encoding process encounters an error.
     ///
     /// - returns: The encoded request.
-    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+    func encode(_ urlRequest: any URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
         var urlRequest = try urlRequest.asURLRequest()
 
         guard let parameters = parameters else { return urlRequest }

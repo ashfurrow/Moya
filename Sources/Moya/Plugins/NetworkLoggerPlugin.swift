@@ -13,13 +13,13 @@ public final class NetworkLoggerPlugin {
 
 // MARK: - PluginType
 extension NetworkLoggerPlugin: PluginType {
-    public func willSend(_ request: RequestType, target: TargetType) {
+    public func willSend(_ request: any RequestType, target: any TargetType) {
         logNetworkRequest(request, target: target) { [weak self] output in
             self?.configuration.output(target, output)
         }
     }
 
-    public func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) {
+    public func didReceive(_ result: Result<Moya.Response, MoyaError>, target: any TargetType) {
         switch result {
         case .success(let response):
             configuration.output(target, logNetworkResponse(response, target: target, isFromError: false))
@@ -32,7 +32,7 @@ extension NetworkLoggerPlugin: PluginType {
 // MARK: - Logging
 private extension NetworkLoggerPlugin {
 
-    func logNetworkRequest(_ request: RequestType, target: TargetType, completion: @escaping ([String]) -> Void) {
+    func logNetworkRequest(_ request: any RequestType, target: any TargetType, completion: @escaping ([String]) -> Void) {
         //cURL formatting
         if configuration.logOptions.contains(.formatRequestAscURL) {
             _ = request.cURLDescription { [weak self] output in
@@ -81,7 +81,7 @@ private extension NetworkLoggerPlugin {
         completion(output)
     }
 
-    func logNetworkResponse(_ response: Response, target: TargetType, isFromError: Bool) -> [String] {
+    func logNetworkResponse(_ response: Response, target: any TargetType, isFromError: Bool) -> [String] {
         // Adding log entries for each given log option
         var output = [String]()
 
@@ -102,7 +102,7 @@ private extension NetworkLoggerPlugin {
         return output
     }
 
-    func logNetworkError(_ error: MoyaError, target: TargetType) -> [String] {
+    func logNetworkError(_ error: MoyaError, target: any TargetType) -> [String] {
         //Some errors will still have a response, like errors due to Alamofire's HTTP code validation.
         if let moyaResponse = error.response {
             return logNetworkResponse(moyaResponse, target: target, isFromError: true)
@@ -119,7 +119,7 @@ public extension NetworkLoggerPlugin {
 
         // MARK: - Typealiases
         // swiftlint:disable nesting
-        public typealias OutputType = (_ target: TargetType, _ items: [String]) -> Void
+        public typealias OutputType = (_ target: any TargetType, _ items: [String]) -> Void
         // swiftlint:enable nesting
 
         // MARK: - Properties
@@ -145,7 +145,7 @@ public extension NetworkLoggerPlugin {
 
         // MARK: - Defaults
 
-        public static func defaultOutput(target: TargetType, items: [String]) {
+        public static func defaultOutput(target: any TargetType, items: [String]) {
             for item in items {
                 print(item, separator: ",", terminator: "\n")
             }
@@ -191,7 +191,7 @@ public extension NetworkLoggerPlugin.Configuration {
         // MARK: Typealiases
         // swiftlint:disable nesting
         public typealias DataFormatterType = (Data) -> (String)
-        public typealias EntryFormatterType = (_ identifier: String, _ message: String, _ target: TargetType) -> String
+        public typealias EntryFormatterType = (_ identifier: String, _ message: String, _ target: any TargetType) -> String
         // swiftlint:enable nesting
 
         // MARK: Properties
@@ -222,7 +222,7 @@ public extension NetworkLoggerPlugin.Configuration {
             return String(data: data, encoding: .utf8) ?? "## Cannot map data to String ##"
         }
 
-        public static func defaultEntryFormatter(identifier: String, message: String, target: TargetType) -> String {
+        public static func defaultEntryFormatter(identifier: String, message: String, target: any TargetType) -> String {
             let date = defaultEntryDateFormatter.string(from: Date())
             return "Moya_Logger: [\(date)] \(identifier): \(message)"
         }

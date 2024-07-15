@@ -3,7 +3,7 @@ import Foundation
 /// Provides each request with optional URLCredentials.
 public final class CredentialsPlugin: PluginType {
 
-    public typealias CredentialClosure = (TargetType) -> URLCredential?
+    public typealias CredentialClosure = (any TargetType) -> URLCredential?
     let credentialsClosure: CredentialClosure
 
     /// Initializes a CredentialsPlugin.
@@ -13,7 +13,7 @@ public final class CredentialsPlugin: PluginType {
 
     // MARK: Plugin
 
-    public func willSend(_ request: RequestType, target: TargetType) {
+    public func willSend(_ request: any RequestType, target: any TargetType) {
         if let credentials = credentialsClosure(target) {
             _ = request.authenticate(with: credentials)
         }

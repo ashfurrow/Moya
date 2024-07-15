@@ -52,7 +52,7 @@ extension GitHub: Equatable {
     }
 }
 
-func url(_ route: TargetType) -> String {
+func url(_ route: any TargetType) -> String {
     route.baseURL.appendingPathComponent(route.path).absoluteString
 }
 
@@ -170,7 +170,7 @@ extension GitHubUserContent: TargetType {
             return nil
         }
     }
-    public var parameterEncoding: ParameterEncoding { URLEncoding.default }
+    public var parameterEncoding: any ParameterEncoding { URLEncoding.default }
     public var task: Task {
         switch self {
         case .downloadMoyaWebContent:

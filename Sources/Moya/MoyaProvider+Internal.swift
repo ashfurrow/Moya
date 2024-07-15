@@ -19,7 +19,7 @@ public extension Method {
 /// Internal extension to keep the inner-workings outside the main Moya.swift file.
 public extension MoyaProvider {
     /// Performs normal requests.
-    func requestNormal(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> Cancellable {
+    func requestNormal(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> any Cancellable {
         let endpoint = self.endpoint(target)
         let stubBehavior = self.stubClosure(target)
         let cancellableToken = CancellableWrapper()
@@ -76,9 +76,9 @@ public extension MoyaProvider {
     }
 
     // swiftlint:disable:next function_parameter_count
-    private func performRequest(_ target: Target, request: URLRequest, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion, endpoint: Endpoint, stubBehavior: Moya.StubBehavior) -> Cancellable {
+    private func performRequest(_ target: Target, request: URLRequest, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion, endpoint: Endpoint, stubBehavior: Moya.StubBehavior) -> any Cancellable {
 
-        let onSendUploadMultipart: (MultipartFormData) -> Cancellable = { multipartFormData in
+        let onSendUploadMultipart: (MultipartFormData) -> any Cancellable = { multipartFormData in
             guard !multipartFormData.parts.isEmpty && endpoint.method.supportsMultipart else {
                 fatalError("\(target) is not a multipart upload target.")
             }
@@ -111,7 +111,7 @@ public extension MoyaProvider {
     }
 
     /// Creates a function which, when called, executes the appropriate stubbing behavior for the given parameters.
-    final func createStubFunction(_ token: CancellableToken, forTarget target: Target, withCompletion completion: @escaping Moya.Completion, endpoint: Endpoint, plugins: [PluginType], request: URLRequest) -> (() -> Void) { // swiftlint:disable:this function_parameter_count
+    final func createStubFunction(_ token: CancellableToken, forTarget target: Target, withCompletion completion: @escaping Moya.Completion, endpoint: Endpoint, plugins: [any PluginType], request: URLRequest) -> (() -> Void) { // swiftlint:disable:this function_parameter_count
         return {
             if token.isCancelled {
                 self.cancelCompletion(completion, target: target)

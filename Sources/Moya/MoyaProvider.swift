@@ -45,7 +45,7 @@ public protocol MoyaProviderType: AnyObject {
     associatedtype Target: TargetType
 
     /// Designated request-making method. Returns a `Cancellable` token to cancel the request later.
-    func request(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> Cancellable
+    func request(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> any Cancellable
 }
 
 /// Request provider class. Requests should be made through this class only.
@@ -77,7 +77,7 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
 
     /// A list of plugins.
     /// e.g. for logging, network activity indicator or credentials.
-    public let plugins: [PluginType]
+    public let plugins: [any PluginType]
 
     public let trackInflights: Bool
 
@@ -97,7 +97,7 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
                 stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
                 callbackQueue: DispatchQueue? = nil,
                 session: Session = MoyaProvider<Target>.defaultAlamofireSession(),
-                plugins: [PluginType] = [],
+                plugins: [any PluginType] = [],
                 trackInflights: Bool = false) {
 
         self.endpointClosure = endpointClosure
@@ -119,7 +119,7 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
     open func request(_ target: Target,
                       callbackQueue: DispatchQueue? = .none,
                       progress: ProgressBlock? = .none,
-                      completion: @escaping Completion) -> Cancellable {
+                      completion: @escaping Completion) -> any Cancellable {
 
         let callbackQueue = callbackQueue ?? self.callbackQueue
         return requestNormal(target, callbackQueue: callbackQueue, progress: progress, completion: completion)
@@ -192,7 +192,7 @@ public extension MoyaProvider {
 }
 
 /// A public function responsible for converting the result of a `URLRequest` to a Result<Moya.Response, MoyaError>.
-public func convertResponseToResult(_ response: HTTPURLResponse?, request: URLRequest?, data: Data?, error: Swift.Error?) ->
+public func convertResponseToResult(_ response: HTTPURLResponse?, request: URLRequest?, data: Data?, error: (any Swift.Error)?) ->
     Result<Moya.Response, MoyaError> {
         switch (response, data, error) {
         case let (.some(response), data, .none):

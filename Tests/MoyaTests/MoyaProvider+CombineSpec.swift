@@ -241,7 +241,7 @@ final class MoyaProviderCombineSpec: QuickSpec {
                 }
 
                 describe("a custom callback queue") {
-                    var stubDescriptor: HTTPStubsDescriptor!
+                    var stubDescriptor: (any HTTPStubsDescriptor)!
 
                     beforeEach {
                         stubDescriptor = HTTPStubs.stubRequests(passingTest: {$0.url!.path == "/zen"}, withStubResponse: { _ in

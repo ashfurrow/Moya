@@ -2,7 +2,7 @@ import Foundation
 
 internal extension URLRequest {
 
-    mutating func encoded(encodable: Encodable, encoder: JSONEncoder = JSONEncoder()) throws -> URLRequest {
+    mutating func encoded(encodable: any Encodable, encoder: JSONEncoder = JSONEncoder()) throws -> URLRequest {
         do {
             let encodable = AnyEncodable(encodable)
             httpBody = try encoder.encode(encodable)
@@ -18,7 +18,7 @@ internal extension URLRequest {
         }
     }
 
-    func encoded(parameters: [String: Any], parameterEncoding: ParameterEncoding) throws -> URLRequest {
+    func encoded(parameters: [String: Any], parameterEncoding: any ParameterEncoding) throws -> URLRequest {
         do {
             return try parameterEncoding.encode(self, with: parameters)
         } catch {
