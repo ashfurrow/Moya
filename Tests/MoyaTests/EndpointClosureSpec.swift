@@ -97,7 +97,7 @@ final class SessionMock: Alamofire.Session {
 
     var uploadMultipartString: String?
 
-    override func upload(multipartFormData: Alamofire.MultipartFormData, with request: URLRequestConvertible, usingThreshold encodingMemoryThreshold: UInt64 = MultipartFormData.encodingMemoryThreshold, interceptor: RequestInterceptor? = nil, fileManager: FileManager = .default) -> UploadRequest {
+    override func upload(multipartFormData: Alamofire.MultipartFormData, with request: any URLRequestConvertible, usingThreshold encodingMemoryThreshold: UInt64 = MultipartFormData.encodingMemoryThreshold, interceptor: (any RequestInterceptor)? = nil, fileManager: FileManager = .default) -> UploadRequest {
         let data = try! multipartFormData.encode()
         uploadMultipartString = String(decoding: data, as: UTF8.self)
 

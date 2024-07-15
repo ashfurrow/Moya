@@ -72,7 +72,7 @@ public final class CancellableToken: Cancellable, CustomDebugStringConvertible {
 
 }
 
-internal typealias RequestableCompletion = (HTTPURLResponse?, URLRequest?, Data?, Swift.Error?) -> Void
+internal typealias RequestableCompletion = (HTTPURLResponse?, URLRequest?, Data?, (any Swift.Error)?) -> Void
 
 internal protocol Requestable {
     func response(callbackQueue: DispatchQueue?, completionHandler: @escaping RequestableCompletion) -> Self
@@ -117,7 +117,7 @@ final class MoyaRequestInterceptor: RequestInterceptor {
         self.willSend = willSend
     }
 
-    func adapt(_ urlRequest: URLRequest, for session: Alamofire.Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+    func adapt(_ urlRequest: URLRequest, for session: Alamofire.Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         let request = prepare?(urlRequest) ?? urlRequest
         willSend?(request)
         completion(.success(request))

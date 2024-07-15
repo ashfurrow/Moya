@@ -12,10 +12,10 @@ internal class MoyaPublisher<Output>: Publisher {
     internal typealias Failure = MoyaError
 
     private class Subscription: Combine.Subscription {
-        private let performCall: () -> Moya.Cancellable?
-        private var cancellable: Moya.Cancellable?
+        private let performCall: () -> (any Moya.Cancellable)?
+        private var cancellable: (any Moya.Cancellable)?
 
-        init(subscriber: AnySubscriber<Output, MoyaError>, callback: @escaping (AnySubscriber<Output, MoyaError>) -> Moya.Cancellable?) {
+        init(subscriber: AnySubscriber<Output, MoyaError>, callback: @escaping (AnySubscriber<Output, MoyaError>) -> (any Moya.Cancellable)?) {
             performCall = { callback(subscriber) }
         }
 
@@ -30,9 +30,9 @@ internal class MoyaPublisher<Output>: Publisher {
         }
     }
 
-    private let callback: (AnySubscriber<Output, MoyaError>) -> Moya.Cancellable?
+    private let callback: (AnySubscriber<Output, MoyaError>) -> (any Moya.Cancellable)?
 
-    init(callback: @escaping (AnySubscriber<Output, MoyaError>) -> Moya.Cancellable?) {
+    init(callback: @escaping (AnySubscriber<Output, MoyaError>) -> (any Moya.Cancellable)?) {
         self.callback = callback
     }
 

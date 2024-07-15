@@ -565,7 +565,7 @@ final class SingleMoyaSpec: QuickSpec {
                 }
                 let single = Response(statusCode: 200, data: data).asSingle()
 
-                var receivedError: Error?
+                var receivedError: (any Error)?
                 _ = single.map(Issue.self, using: decoder).subscribe { event in
                     switch event {
                     case .success:

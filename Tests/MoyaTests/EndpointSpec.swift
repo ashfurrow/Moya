@@ -25,7 +25,7 @@ final class ParametersEncodedEndpointConfiguration: QuickConfiguration {
     override static func configure(_ configuration: Configuration) {
         sharedExamples("endpoint with encoded parameters") { (context: SharedExampleContext) in
             let parameters = context()["parameters"] as! [String: Any]
-            let encoding = context()["encoding"] as! ParameterEncoding
+            let encoding = context()["encoding"] as! any ParameterEncoding
             let endpoint = context()["endpoint"] as! Endpoint
             let request = try! endpoint.urlRequest()
 
@@ -251,7 +251,7 @@ final class EndpointSpec: QuickSpec {
             context("when task is .requestCompositeParameters") {
                 var bodyParameters: [String: Any]!
                 var urlParameters: [String: Any]!
-                var encoding: ParameterEncoding!
+                var encoding: (any ParameterEncoding)!
                 var request: URLRequest!
 
                 beforeEach {
@@ -676,7 +676,7 @@ extension Empty: TargetType {
     var path: String { "" }
     var method: Moya.Method { .get }
     var parameters: [String: Any]? { nil }
-    var parameterEncoding: ParameterEncoding { URLEncoding.default }
+    var parameterEncoding: any ParameterEncoding { URLEncoding.default }
     var task: Task { .requestPlain }
     var sampleData: Data { Data() }
     var headers: [String: String]? { nil }

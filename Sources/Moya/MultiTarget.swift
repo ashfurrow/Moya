@@ -3,10 +3,10 @@ import Foundation
 /// A `TargetType` used to enable `MoyaProvider` to process multiple `TargetType`s.
 public enum MultiTarget: TargetType {
     /// The embedded `TargetType`.
-    case target(TargetType)
+    case target(any TargetType)
 
     /// Initializes a `MultiTarget`.
-    public init(_ target: TargetType) {
+    public init(_ target: any TargetType) {
         self = MultiTarget.target(target)
     }
 
@@ -32,7 +32,7 @@ public enum MultiTarget: TargetType {
     public var headers: [String: String]? { target.headers }
 
     /// The embedded `TargetType`.
-    public var target: TargetType {
+    public var target: any TargetType {
         switch self {
         case .target(let target): return target
         }
@@ -41,7 +41,7 @@ public enum MultiTarget: TargetType {
 
 extension MultiTarget: AccessTokenAuthorizable {
     public var authorizationType: AuthorizationType? {
-        guard let authorizableTarget = target as? AccessTokenAuthorizable else { return nil }
+        guard let authorizableTarget = target as? any AccessTokenAuthorizable else { return nil }
         return authorizableTarget.authorizationType
     }
 }

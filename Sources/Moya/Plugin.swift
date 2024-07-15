@@ -8,23 +8,23 @@ import Foundation
 ///     - inject additional information into a request
 public protocol PluginType {
     /// Called to modify a request before sending.
-    func prepare(_ request: URLRequest, target: TargetType) -> URLRequest
+    func prepare(_ request: URLRequest, target: any TargetType) -> URLRequest
 
     /// Called immediately before a request is sent over the network (or stubbed).
-    func willSend(_ request: RequestType, target: TargetType)
+    func willSend(_ request: any RequestType, target: any TargetType)
 
     /// Called after a response has been received, but before the MoyaProvider has invoked its completion handler.
-    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType)
+    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: any TargetType)
 
     /// Called to modify a result before completion.
-    func process(_ result: Result<Moya.Response, MoyaError>, target: TargetType) -> Result<Moya.Response, MoyaError>
+    func process(_ result: Result<Moya.Response, MoyaError>, target: any TargetType) -> Result<Moya.Response, MoyaError>
 }
 
 public extension PluginType {
-    func prepare(_ request: URLRequest, target: TargetType) -> URLRequest { request }
-    func willSend(_ request: RequestType, target: TargetType) { }
-    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) { }
-    func process(_ result: Result<Moya.Response, MoyaError>, target: TargetType) -> Result<Moya.Response, MoyaError> { result }
+    func prepare(_ request: URLRequest, target: any TargetType) -> URLRequest { request }
+    func willSend(_ request: any RequestType, target: any TargetType) { }
+    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: any TargetType) { }
+    func process(_ result: Result<Moya.Response, MoyaError>, target: any TargetType) -> Result<Moya.Response, MoyaError> { result }
 }
 
 /// Request type used by `willSend` plugin function.

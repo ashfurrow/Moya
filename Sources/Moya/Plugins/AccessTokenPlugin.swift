@@ -62,7 +62,7 @@ extension AuthorizationType: Equatable {
  */
 public struct AccessTokenPlugin: PluginType {
 
-    public typealias TokenClosure = (TargetType) -> String
+    public typealias TokenClosure = (any TargetType) -> String
 
     /// A closure returning the access token to be applied in the header.
     public let tokenClosure: TokenClosure
@@ -85,9 +85,9 @@ public struct AccessTokenPlugin: PluginType {
      - target: The target of the request.
      - returns: The modified `URLRequest`.
      */
-    public func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
+    public func prepare(_ request: URLRequest, target: any TargetType) -> URLRequest {
 
-        guard let authorizable = target as? AccessTokenAuthorizable,
+        guard let authorizable = target as? any AccessTokenAuthorizable,
             let authorizationType = authorizable.authorizationType
             else { return request }
 

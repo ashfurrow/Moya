@@ -362,7 +362,7 @@ final class MoyaProviderIntegrationTests: QuickSpec {
             it("returns an error for status code different than 287") {
                 let target = HTTPBin.validatedUploadMultipartFormData(MultipartFormData(parts: formData), nil, [287])
                 var receievedResponse: Response?
-                var receivedError: Error?
+                var receivedError: (any Error)?
 
                 waitUntil(timeout: .seconds(10)) { done in
                     provider.request(target) { result in
@@ -383,7 +383,7 @@ final class MoyaProviderIntegrationTests: QuickSpec {
             it("returns an error for status code different than 287") {
                 let target = HTTPBin.validatedUploadMultipartBodyParts(formData, nil, [287])
                 var receievedResponse: Response?
-                var receivedError: Error?
+                var receivedError: (any Error)?
 
                 waitUntil(timeout: .seconds(10)) { done in
                     provider.request(target) { result in
@@ -405,7 +405,7 @@ final class MoyaProviderIntegrationTests: QuickSpec {
                 let successCodes = ValidationType.successCodes.statusCodes
                 let target = HTTPBin.validatedUploadMultipartFormData(MultipartFormData(parts: formData), nil, successCodes)
                 var receievedResponse: Response?
-                var receivedError: Error?
+                var receivedError: (any Error)?
 
                 waitUntil(timeout: .seconds(10)) { done in
                     provider.request(target) { result in
@@ -427,7 +427,7 @@ final class MoyaProviderIntegrationTests: QuickSpec {
                 let successCodes = ValidationType.successCodes.statusCodes
                 let target = HTTPBin.validatedUploadMultipartBodyParts(formData, nil, successCodes)
                 var receievedResponse: Response?
-                var receivedError: Error?
+                var receivedError: (any Error)?
 
                 waitUntil(timeout: .seconds(10)) { done in
                     provider.request(target) { result in
@@ -451,7 +451,7 @@ final class MoyaProviderIntegrationTests: QuickSpec {
 final class StubSession: Session {
     var called = false
 
-    override func request(_ convertible: URLRequestConvertible, interceptor: RequestInterceptor? = nil) -> DataRequest {
+    override func request(_ convertible: any URLRequestConvertible, interceptor: (any RequestInterceptor)? = nil) -> DataRequest {
         called = true
         return super.request(convertible, interceptor: interceptor)
     }

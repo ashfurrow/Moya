@@ -13,22 +13,22 @@ public enum MoyaError: Swift.Error {
     case stringMapping(Response)
 
     /// Indicates a response failed to map to a Decodable object.
-    case objectMapping(Swift.Error, Response)
+    case objectMapping(any Swift.Error, Response)
 
     /// Indicates that Encodable couldn't be encoded into Data
-    case encodableMapping(Swift.Error)
+    case encodableMapping(any Swift.Error)
 
     /// Indicates a response failed with an invalid HTTP status code.
     case statusCode(Response)
 
     /// Indicates a response failed due to an underlying `Error`.
-    case underlying(Swift.Error, Response?)
+    case underlying(any Swift.Error, Response?)
 
     /// Indicates that an `Endpoint` failed to map to a `URLRequest`.
     case requestMapping(String)
 
     /// Indicates that an `Endpoint` failed to encode the parameters for the `URLRequest`.
-    case parameterEncoding(Swift.Error)
+    case parameterEncoding(any Swift.Error)
 }
 
 public extension MoyaError {
@@ -48,7 +48,7 @@ public extension MoyaError {
     }
 
     /// Depending on error type, returns an underlying `Error`.
-    internal var underlyingError: Swift.Error? {
+    internal var underlyingError: (any Swift.Error)? {
         switch self {
         case .imageMapping: return nil
         case .jsonMapping: return nil

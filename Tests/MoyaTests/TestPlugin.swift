@@ -3,17 +3,17 @@ import Foundation
 @testable import Moya
 
 final class TestingPlugin: PluginType {
-    var request: (RequestType, TargetType)?
+    var request: (any RequestType, any TargetType)?
     var result: Result<Moya.Response, MoyaError>?
     var didPrepare = false
 
-    func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
+    func prepare(_ request: URLRequest, target: any TargetType) -> URLRequest {
         var request = request
         request.addValue("yes", forHTTPHeaderField: "prepared")
         return request
     }
 
-    func willSend(_ request: RequestType, target: TargetType) {
+    func willSend(_ request: any RequestType, target: any TargetType) {
         self.request = (request, target)
 
         // We check for whether or not we did prepare here to make sure prepare gets called
@@ -21,11 +21,11 @@ final class TestingPlugin: PluginType {
         didPrepare = request.request?.allHTTPHeaderFields?["prepared"] == "yes"
     }
 
-    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: TargetType) {
+    func didReceive(_ result: Result<Moya.Response, MoyaError>, target: any TargetType) {
         self.result = result
     }
 
-    func process(_ result: Result<Response, MoyaError>, target: TargetType) -> Result<Response, MoyaError> {
+    func process(_ result: Result<Response, MoyaError>, target: any TargetType) -> Result<Response, MoyaError> {
         var result = result
 
         if case .success(let response) = result {

@@ -9,7 +9,7 @@ public protocol Cancellable {
 }
 
 internal class CancellableWrapper: Cancellable {
-    internal var innerCancellable: Cancellable = SimpleCancellable()
+    internal var innerCancellable: any Cancellable = SimpleCancellable()
 
     var isCancelled: Bool { innerCancellable.isCancelled }
 

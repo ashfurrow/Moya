@@ -555,7 +555,7 @@ final class SignalProducerMoyaSpec: QuickSpec {
                 }
                 let signal = signalSendingData(data)
 
-                var receivedError: Error?
+                var receivedError: (any Error)?
                 _ = signal.map(Issue.self, using: decoder).startWithResult { result in
                     switch result {
                     case .success:
