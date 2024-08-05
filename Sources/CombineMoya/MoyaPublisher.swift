@@ -20,7 +20,7 @@ internal class MoyaPublisher<Output>: Publisher {
         }
 
         func request(_ demand: Subscribers.Demand) {
-            guard demand > .none else { return }
+            guard demand > .none && cancellable == nil else { return }
 
             cancellable = performCall()
         }
